@@ -1,0 +1,636 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+/* Header Navigation styles */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.navbar {
+    flex-grow: 1;
+    justify-content: flex-end;
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: white;
+    margin-right: 1rem;
+    position: relative;
+    padding-bottom: 5px;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #3498db;
+    border-bottom: 2px solid #3498db; /* Hiệu ứng gạch chân */
+}
+
+.navbar-nav .nav-item .nav-link.active {
+    color: #3498db;
+    border-bottom: 2px solid #3498db;
+}
+
+.navbar-nav .nav-item .login-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background-color: #3498db;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-weight: 600;
+    border: none;
+}
+
+.navbar-nav .nav-item .login-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-nav .nav-item {
+        margin-bottom: 10px;
+    }
+
+    .navbar-nav .nav-link {
+        color: #2c3e50; /* Màu chữ đậm để nổi bật trên nền trắng */
+        text-align: center;
+    }
+
+    .navbar-nav .nav-item .login-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .navbar-collapse {
+        text-align: center;
+    }
+}
+
+
+/* Section: Tìm Chuyến Xe */
+.search-trip-section {
+    background-color: #f8f9fa;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 2rem;
+}
+
+.card-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #34495e;
+    display: flex;
+    align-items: center;
+}
+
+.form-control {
+    border: 2px solid #dfe6e9;
+    padding: 0.75rem 1.5rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: none;
+}
+
+.rounded-pill {
+    border-radius: 50px;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Kết quả tìm kiếm */
+#searchResults {
+    display: none; /* Ban đầu ẩn kết quả tìm kiếm */
+}
+
+.list-group-item {
+    background-color: #ffffff;
+    border: 1px solid #dfe6e9;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.list-group-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS cho sơ đồ ghế */
+.seat-container {
+    display: inline-block;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.seat {
+    width: 50px;
+    height: 50px;
+    background-color: #e0e0e0;
+    text-align: center;
+    line-height: 50px;
+    margin: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border: 2px solid #cccccc;
+}
+
+.seat:hover {
+    transform: scale(1.1);
+}
+
+.seat.selected {
+    background-color: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
+/* CSS cho hóa đơn */
+.invoice {
+    background-color: #f4f4f4;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.invoice ul {
+    padding: 0;
+}
+
+.invoice ul li {
+    list-style: none;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.invoice ul li:last-child {
+    border-bottom: none;
+}
+
+.invoice .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.invoice .btn-success:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card-title {
+        font-size: 1.5rem;
+    }
+
+    .form-control {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Section: Chuyến Đi Phổ Biến */
+.popular-trips-section {
+    background-color: #f8f9fa;
+}
+
+.popular-trips-section h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+}
+
+.trip-card {
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.trip-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.trip-card img {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 1.5rem;
+    background-color: #ffffff;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.card-text {
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.rounded-pill {
+    border-radius: 50px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .popular-trips-section h2 {
+        font-size: 1.75rem;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Section: Dịch Vụ Đặc Biệt */
+.special-services-section {
+    background-color: #f8f9fa;
+}
+
+.special-services-section h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+}
+
+.service-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+}
+
+.service-icon {
+    font-size: 3rem;
+    color: #3498db;
+    transition: color 0.3s ease;
+}
+
+.service-title {
+    font-size: 1.25rem;
+    color: #2c3e50;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.service-description {
+    font-size: 1rem;
+    color: #7f8c8d;
+}
+
+
+/* Section: Đánh Giá Khách Hàng */
+.customer-reviews-section {
+    background-color: #f8f9fa;
+}
+
+.review-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 4px solid #2980b9;
+    width: 100%;
+    max-width: 100%;
+    height: 100%; /* Đảm bảo thẻ chiếm toàn bộ chiều cao */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Căn nội dung đều nhau */
+}
+
+.review-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+}
+
+.review-icon {
+    font-size: 3rem;
+    color: #3498db;
+    transition: color 0.3s ease;
+}
+
+.review-card:hover .review-icon {
+    color: #2980b9;
+}
+
+blockquote {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    border-left: 5px solid #2980b9;
+    padding-left: 15px;
+    margin-bottom: 1rem;
+    flex-grow: 1; /* Đảm bảo nội dung này chiếm khoảng giữa */
+}
+
+blockquote-footer {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    background-color: #ecf0f1;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    flex-shrink: 0;
+}
+
+.review-stars {
+    flex-shrink: 0;
+    margin-top: 15px;
+}
+
+.review-stars i {
+    font-size: 1.25rem;
+}
+
+/* Carousel controls */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: #2980b9;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+    background-color: #3498db;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 1.75rem;
+    }
+    .review-card {
+        margin-bottom: 15px;
+    }
+}
+
+
+/* Section: Về Chúng Tôi */
+.about-us-section {
+    background-color: #f8f9fa;
+}
+
+.about-us-section h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+}
+
+.about-us-section h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.about-us-section p {
+    font-size: 1rem;
+    color: #7f8c8d;
+    line-height: 1.8;
+}
+
+.img-fluid {
+    border-radius: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-us-section h2 {
+        font-size: 1.75rem;
+    }
+
+    .about-us-section h3 {
+        font-size: 1.25rem;
+    }
+}
+
+
+/* Footer styles */
+footer {
+    background-color: #2c3e50;
+    color: white;
+    padding: 2rem 0;
+}
+
+footer h5 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+footer p {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #bdc3c7;
+}
+
+footer a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #3498db;
+}
+
+.social-icons .social-icon {
+    width: 45px;
+    height: 45px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons .social-icon i {
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
+}
+
+.social-icon.me-3:nth-child(1) {
+    background-color: #3b5998; /* Facebook màu xanh sáng */
+}
+
+.social-icon.me-3:nth-child(2) {
+    background-color: #00acee; /* Twitter màu xanh sáng */
+}
+
+.social-icon:nth-child(3) {
+    background-color: #e1306c; /* Instagram màu hồng sáng */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    footer .col-md-6 {
+        text-align: center;
+    }
+    
+    footer .social-icons {
+        justify-content: center;
+    }
+}
+
+/* Thiết kế modal chung */
+.modal-content {
+    border-radius: 15px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa 50%, #e9ecef 100%);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-title {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.btn-close {
+    outline: none;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.form-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-control-lg {
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 50px;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease;
+}
+
+.form-control-lg:focus {
+    border-color: #3498db;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+.link-primary {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.link-primary:hover {
+    text-decoration: underline;
+}
+
+.text-center p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.modal-dialog-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Icon và khoảng cách */
+.form-label i {
+    color: #3498db;
+}
+
+.form-control::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.btn-lg i {
+    margin-right: 8px;
+}
+

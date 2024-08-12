@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đặt Vé Xe Khách</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="bg-dark text-white py-3 shadow-sm">
+      <div class="container d-flex justify-content-between align-items-center">
+        <h1 class="h3 mb-0">TruongZ</h1>
+        <nav class="navbar navbar-expand-lg">
+          <button
+            class="navbar-toggler text-white"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="#search-trip">Đặt Vé</a>
+                <!-- Liên kết đến section "Tìm Chuyến Xe" -->
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#special-services">Dịch Vụ</a>
+                <!-- Liên kết đến section "Dịch Vụ Đặc Biệt" -->
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#about-us">Về Chúng Tôi</a>
+                <!-- Liên kết đến section "Về Chúng Tôi" -->
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#customer-reviews">Đánh Giá</a>
+                <!-- Liên kết đến section "Đánh Giá Khách Hàng" -->
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link btn btn-primary text-white login-btn"
+                  href="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#loginRegisterModal"
+                  >Đăng Nhập</a
+                >
+                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                  <li><a class="dropdown-item" href="/logout">Đăng Xuất</a></li>
+                </ul>
+
+                <!-- Nút Đăng Nhập mở modal -->
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+      <!-- Section: Tìm Chuyến Xe -->
+      <section id="search-trip" class="search-trip-section py-5">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="card border-0 shadow-lg p-4">
+                <h4 class="card-title text-center mb-4">Tìm Chuyến Xe</h4>
+                <form id="searchForm">
+                  <div class="row mb-3">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                      <label for="from" class="form-label">
+                        <i class="fas fa-map-marker-alt me-2 text-primary"></i
+                        >Điểm Đi
+                      </label>
+                      <select
+                        class="form-select rounded-pill"
+                        id="from"
+                        required
+                      >
+                        <option value="" disabled selected>Chọn điểm đi</option>
+                        <option value="Hà Nội">Hà Nội</option>
+                        <option value="Sài Gòn">Sài Gòn</option>
+                        <option value="Đà Nẵng">Đà Nẵng</option>
+                        <!-- Thêm các tỉnh thành khác -->
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="to" class="form-label">
+                        <i class="fas fa-map-marker-alt me-2 text-primary"></i
+                        >Điểm Đến
+                      </label>
+                      <select class="form-select rounded-pill" id="to" required>
+                        <option value="" disabled selected>
+                          Chọn điểm đến
+                        </option>
+                        <option value="Hà Nội">Hà Nội</option>
+                        <option value="Sài Gòn">Sài Gòn</option>
+                        <option value="Đà Nẵng">Đà Nẵng</option>
+                        <!-- Thêm các tỉnh thành khác -->
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mb-4">
+                    <div class="col-md-12">
+                      <label for="date" class="form-label">
+                        <i class="fas fa-calendar-alt me-2 text-primary"></i
+                        >Ngày Đi
+                      </label>
+                      <input
+                        type="date"
+                        class="form-control rounded-pill"
+                        id="date"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary rounded-pill px-4 py-2"
+                    >
+                      <i class="fas fa-search me-2"></i>Tìm Kiếm
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Kết quả tìm kiếm -->
+              <div id="searchResults" class="mt-5" style="display: none">
+                <h5 class="text-center mb-4">Kết Quả Tìm Kiếm</h5>
+                <div class="list-group" id="tripList">
+                  <!-- Các kết quả tìm kiếm sẽ được thêm vào đây -->
+                </div>
+              </div>
+
+              <!-- Sơ đồ ghế và Hóa đơn -->
+              <div class="row mt-5" id="seatMapRow" style="display: none">
+                <div class="col-md-8">
+                  <h5 class="text-center mb-4">Sơ Đồ Ghế</h5>
+                  <div class="text-center">
+                    <!-- Sơ đồ ghế mẫu -->
+                    <div class="seat-container">
+                      <!-- Ghế sẽ được thêm vào đây -->
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <h5 class="text-center mb-4">Hóa Đơn</h5>
+                  <div class="invoice bg-light p-3 rounded">
+                    <ul id="invoiceList" class="list-unstyled mb-3">
+                      <!-- Thông tin ghế sẽ được thêm vào đây -->
+                    </ul>
+                    <div class="text-center">
+                      <button class="btn btn-success rounded-pill px-4 py-2">
+                        Thanh Toán
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Chuyến Đi Phổ Biến -->
+      <section class="popular-trips-section py-5">
+        <div class="container">
+          <h2 class="text-center mb-5">Chuyến Đi Phổ Biến</h2>
+          <div class="row">
+            <div class="col-md-4 mb-4">
+              <div class="card trip-card border-0 shadow-lg">
+                <img
+                  src="https://via.placeholder.com/350x200"
+                  class="card-img-top"
+                  alt="Hà Nội - Sài Gòn"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Hà Nội - Sài Gòn</h5>
+                  <p class="card-text">
+                    Tận hưởng hành trình từ Bắc vào Nam với các dịch vụ tốt
+                    nhất.
+                  </p>
+                  <a href="#" class="btn btn-primary rounded-pill">Đặt ngay</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-4">
+              <div class="card trip-card border-0 shadow-lg">
+                <img
+                  src="https://via.placeholder.com/350x200"
+                  class="card-img-top"
+                  alt="Đà Nẵng - Hà Nội"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Đà Nẵng - Hà Nội</h5>
+                  <p class="card-text">
+                    Khám phá Đà Nẵng và Hà Nội với các chuyến xe tiện nghi.
+                  </p>
+                  <a href="#" class="btn btn-primary rounded-pill">Đặt ngay</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 mb-4">
+              <div class="card trip-card border-0 shadow-lg">
+                <img
+                  src="https://via.placeholder.com/350x200"
+                  class="card-img-top"
+                  alt="Nha Trang - Sài Gòn"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">Nha Trang - Sài Gòn</h5>
+                  <p class="card-text">
+                    Trải nghiệm biển xanh Nha Trang và thành phố sôi động Sài
+                    Gòn.
+                  </p>
+                  <a href="#" class="btn btn-primary rounded-pill">Đặt ngay</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Dịch Vụ Đặc Biệt -->
+      <section id="special-services" class="special-services-section py-5">
+        <div class="container">
+          <h2 class="text-center mb-5">Dịch Vụ Đặc Biệt</h2>
+          <div class="row text-center">
+            <div class="col-md-4 mb-4">
+              <div class="service-card p-4 shadow-lg rounded bg-white">
+                <div class="service-icon mb-3">
+                  <i class="fas fa-wifi display-3 text-primary"></i>
+                </div>
+                <h5 class="service-title mb-3">Wi-Fi Miễn Phí</h5>
+                <p class="service-description">
+                  Lướt web thoải mái trong suốt hành trình với Wi-Fi tốc độ cao.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4 mb-4">
+              <div class="service-card p-4 shadow-lg rounded bg-white">
+                <div class="service-icon mb-3">
+                  <i class="fas fa-coffee display-3 text-primary"></i>
+                </div>
+                <h5 class="service-title mb-3">Nước Uống Miễn Phí</h5>
+                <p class="service-description">
+                  Thưởng thức các loại nước uống miễn phí suốt hành trình.
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4 mb-4">
+              <div class="service-card p-4 shadow-lg rounded bg-white">
+                <div class="service-icon mb-3">
+                  <i class="fas fa-tv display-3 text-primary"></i>
+                </div>
+                <h5 class="service-title mb-3">Giải Trí Trên Xe</h5>
+                <p class="service-description">
+                  Thư giãn với các chương trình giải trí phong phú trên xe.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Về Chúng Tôi -->
+      <section id="about-us" class="about-us-section py-5">
+        <div class="container">
+          <h2 class="text-center mb-5">Về Chúng Tôi</h2>
+          <div class="row align-items-center">
+            <div class="col-md-6 mb-4 mb-md-0">
+              <img
+                src="https://via.placeholder.com/500x300"
+                class="img-fluid rounded"
+                alt="Về chúng tôi"
+              />
+            </div>
+            <div class="col-md-6">
+              <h3 class="mb-4">Chúng tôi là ai?</h3>
+              <p class="text-muted mb-4">
+                Chúng tôi cung cấp dịch vụ đặt vé xe khách hàng đầu, mang lại sự
+                tiện lợi và thoải mái cho hành khách trong mỗi chuyến đi. Với
+                nhiều năm kinh nghiệm trong ngành vận tải, chúng tôi cam kết
+                mang đến những trải nghiệm tuyệt vời nhất cho khách hàng.
+              </p>
+              <p class="text-muted">
+                Đội ngũ của chúng tôi luôn sẵn sàng hỗ trợ bạn 24/7 với dịch vụ
+                chất lượng cao, hệ thống đặt vé nhanh chóng và các tiện nghi
+                hiện đại trên xe. Chúng tôi tin rằng, mỗi hành trình sẽ trở
+                thành một kỷ niệm đáng nhớ.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Đánh Giá Khách Hàng -->
+      <section id="customer-reviews" class="customer-reviews-section py-5">
+        <div class="container">
+          <h2 class="section-title text-center mb-5">Đánh Giá Khách Hàng</h2>
+          <div
+            id="customerReviewsCarousel"
+            class="carousel slide"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div
+                      class="review-card p-4 shadow-lg rounded bg-white h-100"
+                    >
+                      <div class="review-icon text-center mb-3">
+                        <i
+                          class="fas fa-user-circle display-4 text-primary"
+                        ></i>
+                      </div>
+                      <blockquote class="blockquote text-center">
+                        <p class="mb-3">
+                          "Dịch vụ tuyệt vời, tôi đã có một chuyến đi thật thoải
+                          mái và tiện nghi."
+                        </p>
+                        <footer class="blockquote-footer bg-light p-2 rounded">
+                          Nguyễn Văn A
+                        </footer>
+                      </blockquote>
+                      <div class="review-stars text-center mt-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star-half-alt text-warning"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div
+                      class="review-card p-4 shadow-lg rounded bg-white h-100"
+                    >
+                      <div class="review-icon text-center mb-3">
+                        <i
+                          class="fas fa-user-circle display-4 text-primary"
+                        ></i>
+                      </div>
+                      <blockquote class="blockquote text-center">
+                        <p class="mb-3">
+                          "Xe sạch sẽ, tài xế rất thân thiện và đúng giờ."
+                        </p>
+                        <footer class="blockquote-footer bg-light p-2 rounded">
+                          Trần Thị B
+                        </footer>
+                      </blockquote>
+                      <div class="review-stars text-center mt-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div
+                      class="review-card p-4 shadow-lg rounded bg-white h-100"
+                    >
+                      <div class="review-icon text-center mb-3">
+                        <i
+                          class="fas fa-user-circle display-4 text-primary"
+                        ></i>
+                      </div>
+                      <blockquote class="blockquote text-center">
+                        <p class="mb-3">
+                          "Giá cả hợp lý, dịch vụ chuyên nghiệp, tôi sẽ tiếp tục
+                          sử dụng."
+                        </p>
+                        <footer class="blockquote-footer bg-light p-2 rounded">
+                          Lê Văn C
+                        </footer>
+                      </blockquote>
+                      <div class="review-stars text-center mt-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star-half-alt text-warning"></i>
+                        <i class="far fa-star text-warning"></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div
+                      class="review-card p-4 shadow-lg rounded bg-white h-100"
+                    >
+                      <div class="review-icon text-center mb-3">
+                        <i
+                          class="fas fa-user-circle display-4 text-primary"
+                        ></i>
+                      </div>
+                      <blockquote class="blockquote text-center">
+                        <p class="mb-3">
+                          "Chuyến đi đúng giờ, dịch vụ khách hàng rất tốt."
+                        </p>
+                        <footer class="blockquote-footer bg-light p-2 rounded">
+                          Phạm Thị D
+                        </footer>
+                      </blockquote>
+                      <div class="review-stars text-center mt-3">
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                        <i class="fas fa-star text-warning"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Add more carousel-item divs for more reviews -->
+            </div>
+            <!-- Controls -->
+            <button
+              class="carousel-control-prev"
+              type="button"
+              data-bs-target="#customerReviewsCarousel"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="carousel-control-next"
+              type="button"
+              data-bs-target="#customerReviewsCarousel"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <h5>Về Chúng Tôi</h5>
+            <p>
+              Chúng tôi cung cấp dịch vụ đặt vé xe khách chất lượng, đảm bảo sự
+              tiện lợi và thoải mái cho mọi hành trình của bạn.
+            </p>
+          </div>
+          <div class="col-md-6 mb-3">
+            <h5>Kết Nối Với Chúng Tôi</h5>
+            <div class="social-icons mt-3 d-flex justify-content-center">
+              <a
+                href="https://www.facebook.com"
+                target="_blank"
+                class="social-icon me-3"
+              >
+                <i class="fab fa-facebook-f fa-lg"></i>
+              </a>
+              <a
+                href="https://www.twitter.com"
+                target="_blank"
+                class="social-icon me-3"
+              >
+                <i class="fab fa-twitter fa-lg"></i>
+              </a>
+              <a
+                href="https://www.instagram.com"
+                target="_blank"
+                class="social-icon"
+              >
+                <i class="fab fa-instagram fa-lg"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4">
+          <p>© 2024 Đặt Vé Xe Khách. All rights reserved.</p>
+          <p>Thiết kế bởi <a href="#" class="text-white">DMT.</a></p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Modal Đăng Nhập/Đăng Ký -->
+    <div
+      class="modal fade"
+      id="loginRegisterModal"
+      tabindex="-1"
+      aria-labelledby="loginRegisterModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <h5
+              class="modal-title w-100 text-center"
+              id="loginRegisterModalLabel"
+            >
+              Đăng Nhập
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Form Đăng Nhập -->
+            <form id="loginForm">
+              <div class="mb-3">
+                <label for="loginUsername" class="form-label"
+                  ><i class="fas fa-user me-2"></i>Tên đăng nhập</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-lg rounded-pill"
+                  id="loginUsername"
+                  placeholder="Nhập tên đăng nhập"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="loginPassword" class="form-label"
+                  ><i class="fas fa-lock me-2"></i>Mật khẩu</label
+                >
+                <input
+                  type="password"
+                  class="form-control form-control-lg rounded-pill"
+                  id="loginPassword"
+                  placeholder="Nhập mật khẩu"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg w-100 rounded-pill"
+              >
+                <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
+              </button>
+            </form>
+
+            <!-- Link chuyển sang Đăng Ký -->
+            <div class="text-center mt-3">
+              <p>
+                Chưa có tài khoản?
+                <a href="#" id="showRegisterForm" class="link-primary"
+                  >Đăng Ký</a
+                >
+              </p>
+            </div>
+
+            <!-- Form Đăng Ký (Ẩn ban đầu) -->
+            <form id="registerForm" style="display: none">
+              <div class="mb-3">
+                <label for="registerUsername" class="form-label"
+                  ><i class="fas fa-user me-2"></i>Tên đăng nhập</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-lg rounded-pill"
+                  id="registerUsername"
+                  placeholder="Nhập tên đăng nhập"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="registerEmail" class="form-label"
+                  ><i class="fas fa-envelope me-2"></i>Gmail</label
+                >
+                <input
+                  type="email"
+                  class="form-control form-control-lg rounded-pill"
+                  id="registerEmail"
+                  placeholder="Nhập email"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="registerPhone" class="form-label"
+                  ><i class="fas fa-phone me-2"></i>Số điện thoại</label
+                >
+                <input
+                  type="tel"
+                  class="form-control form-control-lg rounded-pill"
+                  id="registerPhone"
+                  placeholder="Nhập số điện thoại"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="registerPassword" class="form-label"
+                  ><i class="fas fa-lock me-2"></i>Mật khẩu</label
+                >
+                <input
+                  type="password"
+                  class="form-control form-control-lg rounded-pill"
+                  id="registerPassword"
+                  placeholder="Nhập mật khẩu"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg w-100 rounded-pill"
+              >
+                <i class="fas fa-user-plus me-2"></i>Đăng Ký
+              </button>
+            </form>
+
+            <!-- Link chuyển sang Đăng Nhập -->
+            <div class="text-center mt-3">
+              <p>
+                Đã có tài khoản?
+                <a href="#" id="showLoginForm" class="link-primary"
+                  >Đăng Nhập</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./index.js"></script>
+    <script src="./login.js"></script>
+  </body>
+</html>
