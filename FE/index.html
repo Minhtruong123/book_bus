@@ -87,13 +87,13 @@
                       </label>
                       <select
                         class="form-select rounded-pill"
-                        id="from"
+                        id="arrivalLocation"
                         required
                       >
                         <option value="" disabled selected>Chọn điểm đi</option>
-                        <option value="Hà Nội">Hà Nội</option>
-                        <option value="Sài Gòn">Sài Gòn</option>
-                        <option value="Đà Nẵng">Đà Nẵng</option>
+                        <option value="HaNoi">Hà Nội</option>
+                        <option value="HoChiMinh">Sài Gòn</option>
+                        <option value="DaNang">Đà Nẵng</option>
                         <!-- Thêm các tỉnh thành khác -->
                       </select>
                     </div>
@@ -102,13 +102,13 @@
                         <i class="fas fa-map-marker-alt me-2 text-primary"></i
                         >Điểm Đến
                       </label>
-                      <select class="form-select rounded-pill" id="to" required>
+                      <select class="form-select rounded-pill" id="departureLocation" required>
                         <option value="" disabled selected>
                           Chọn điểm đến
                         </option>
-                        <option value="Hà Nội">Hà Nội</option>
-                        <option value="Sài Gòn">Sài Gòn</option>
-                        <option value="Đà Nẵng">Đà Nẵng</option>
+                        <option value="HaNoi">Hà Nội</option>
+                        <option value="HoChiMinh">Sài Gòn</option>
+                        <option value="DaNang">Đà Nẵng</option>
                         <!-- Thêm các tỉnh thành khác -->
                       </select>
                     </div>
@@ -129,7 +129,8 @@
                   </div>
                   <div class="text-center">
                     <button
-                      type="submit"
+                      type="button"
+                      onclick="findTicket()"
                       class="btn btn-primary rounded-pill px-4 py-2"
                     >
                       <i class="fas fa-search me-2"></i>Tìm Kiếm
@@ -163,8 +164,8 @@
                     <ul id="invoiceList" class="list-unstyled mb-3">
                       <!-- Thông tin ghế sẽ được thêm vào đây -->
                     </ul>
-                    <div class="text-center">
-                      <button class="btn btn-success rounded-pill px-4 py-2">
+                    <div class="text-center" id="id-ticket">
+                      <button type="button" onclick="buyTicket()" class="btn btn-success rounded-pill px-4 py-2">
                         Thanh Toán
                       </button>
                     </div>
@@ -557,7 +558,8 @@
                 />
               </div>
               <button
-                type="submit"
+                onclick="loginButton()"
+                type="button"
                 class="btn btn-primary btn-lg w-100 rounded-pill"
               >
                 <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập
@@ -649,5 +651,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./index.js"></script>
     <script src="./login.js"></script>
+    <script src="./trip.js"></script>
+    <script src="./tickets.js"></script>
+    <script src="./booking.js"></script>
   </body>
 </html>

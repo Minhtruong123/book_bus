@@ -38,13 +38,14 @@ public class SercurityConfig {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/ticket/**").permitAll()
+                        .requestMatchers("/trip/**").permitAll()
                         .requestMatchers("/booking/**").permitAll()
-                        .requestMatchers("/booking/buy").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-//                        .defaultSuccessUrl("/home", true) // Redirect to home after successful login
+//                        .defaultSuccessUrl("/home", true)
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
@@ -52,6 +53,11 @@ public class SercurityConfig {
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .deleteCookies("JSESSIONID")
+//                )
+//                .sessionManagement(session -> session
+//                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+//                        .maximumSessions(1)
+//                        .expiredUrl("/login?expired=true")
                 );
 
         return http.build();

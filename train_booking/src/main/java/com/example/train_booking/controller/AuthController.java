@@ -1,4 +1,5 @@
 package com.example.train_booking.controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,20 +27,6 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserService userService;
-    @GetMapping("/check-login-status")
-    public ResponseEntity<Map<String, Object>> checkLoginStatus(HttpServletRequest request) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Map<String, Object> response = new HashMap<>();
-
-        if (auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken)) {
-            response.put("loggedIn", true);
-            response.put("username", auth.getName());
-        } else {
-            response.put("loggedIn", false);
-        }
-        request.getSession().setAttribute("username", auth.getName());
-        return ResponseEntity.ok(response);
-    }
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user){
         if (userService.findUserByName(user.getUsername()) != null) {
@@ -56,9 +43,16 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             Authentication auth = authenticationManager.authenticate(authReq);
             SecurityContextHolder.getContext().setAuthentication(auth);
-
+            Map<String, Object> response = new HashMap<>();
             request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-            return ResponseEntity.noContent().build();
+            Authentication principalUser = SecurityContextHolder.getContext().getAuthentication();
+            if (principalUser != null && principalUser.isAuthenticated() && !(principalUser instanceof AnonymousAuthenticationToken)) {
+                response.put("loggedIn", true);
+                response.put("username", principalUser.getName());
+            } else {
+                response.put("loggedIn", false);
+            }
+            return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }

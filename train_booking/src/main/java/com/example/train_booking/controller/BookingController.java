@@ -28,15 +28,6 @@ public class BookingController {
     private UserService userService;
     @Autowired
     private TicketService ticketService;
-    @GetMapping("/get-ticket/{id}")
-    public ResponseEntity<?> getAllTicketByTripId(@PathVariable Integer id){
-        List<Ticket> tickets = ticketService.getAllTicketByTripId(id);
-        if (tickets == null || tickets.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(tickets);
-        }
-    }
     @PostMapping("/buy")
     public ResponseEntity<?> buyTicket(@RequestBody BookingRequest bookingRequest, Principal principal) {
         if (principal == null) {

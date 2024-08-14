@@ -1,100 +1,16 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const searchForm = document.getElementById("searchForm");
-  const searchResults = document.getElementById("searchResults");
+const findTicket = () => {
   const tripList = document.getElementById("tripList");
   const seatMapRow = document.getElementById("seatMapRow");
-  const invoiceList = document.getElementById("invoiceList");
-  let selectedSeats = [];
+  tripList.innerHTML = "";
+  seatMapRow.style.display = "none";
 
-  searchForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+  const arrivalLocation = document.getElementById("arrivalLocation").value;
+  const departureLocation =
+    document.getElementById("departureLocation").value;
+  const date = document.getElementById("date").value;
 
-    // Xóa kết quả tìm kiếm cũ
-    tripList.innerHTML = "";
-    seatMapRow.style.display = "none"; // Ẩn sơ đồ ghế và hóa đơn ban đầu
-
-    const trips = [
-      { time: "08:00", from: "Hà Nội", to: "Sài Gòn" },
-      { time: "12:00", from: "Hà Nội", to: "Sài Gòn" },
-      { time: "18:00", from: "Hà Nội", to: "Sài Gòn" },
-    ];
-
-    // Hiển thị kết quả tìm kiếm
-    trips.forEach((trip) => {
-      const tripItem = document.createElement("a");
-      tripItem.href = "#";
-      tripItem.classList.add("list-group-item", "list-group-item-action");
-      tripItem.textContent = `${trip.time} - ${trip.from} đến ${trip.to}`;
-      tripItem.addEventListener("click", function () {
-        displaySeatMap(trip);
-      });
-      tripList.appendChild(tripItem);
-    });
-
-    searchResults.style.display = "block";
-  });
-
-  const displaySeatMap = (trip) => {
-    seatMapRow.style.display = "flex";
-
-    const seatContainer = document.querySelector(".seat-container");
-    seatContainer.innerHTML = ""; // Xóa sơ đồ ghế cũ
-    invoiceList.innerHTML = ""; // Xóa hóa đơn cũ
-    selectedSeats = [];
-
-    const seatLayout = [
-      ["A1", "A2", "A3", "A4", "A5"],
-      ["B1", "B2", "B3", "B4", "B5"],
-      ["C1", "C2", "C3", "C4", "C5"],
-      ["D1", "D2", "D3", "D4", "D5"],
-      ["E1", "E2", "E3", "E4", "E5"],
-    ];
-
-    seatLayout.forEach((row) => {
-      const rowDiv = document.createElement("div");
-      rowDiv.classList.add("d-flex", "justify-content-center", "mb-2");
-      row.forEach((seat) => {
-        const seatDiv = document.createElement("div");
-        seatDiv.classList.add("seat", "p-2", "border", "rounded", "mx-1");
-        seatDiv.textContent = seat;
-        seatDiv.style.cursor = "pointer";
-        seatDiv.addEventListener("click", function () {
-          toggleSeatSelection(seatDiv, seat);
-        });
-        rowDiv.appendChild(seatDiv);
-      });
-      seatContainer.appendChild(rowDiv);
-    });
-  };
-
-  const toggleSeatSelection = (seatDiv, seat) => {
-    if (selectedSeats.includes(seat)) {
-      selectedSeats = selectedSeats.filter((s) => s !== seat);
-      seatDiv.classList.remove("selected");
-      removeSeatFromInvoice(seat);
-    } else {
-      selectedSeats.push(seat);
-      seatDiv.classList.add("selected");
-      addSeatToInvoice(seat);
-    }
-  };
-
-  const addSeatToInvoice = (seat) => {
-    const seatItem = document.createElement("li");
-    seatItem.textContent = `Ghế: ${seat} - 200,000 VND`;
-    seatItem.setAttribute("data-seat", seat);
-    invoiceList.appendChild(seatItem);
-  };
-
-  const removeSeatFromInvoice = (seat) => {
-    const seatItems = document.querySelectorAll("#invoiceList li");
-    seatItems.forEach((item) => {
-      if (item.getAttribute("data-seat") === seat) {
-        item.remove();
-      }
-    });
-  };
-});
+  fetchTrips(arrivalLocation, departureLocation, date);
+};
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
@@ -108,5 +24,63 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 document.addEventListener("DOMContentLoaded", function () {
   const dateInput = document.getElementById("date");
   const today = new Date().toISOString().split("T")[0];
-  dateInput.value = today; 
+  dateInput.value = today;
 });
+
+const fetchTrips = (arrivalLocation, departureLocation, date) => {
+  const encodedArrivalLocation = encodeURIComponent(arrivalLocation);
+  const encodedDepartureLocation = encodeURIComponent(departureLocation);
+  const url = `http://localhost:8080/trip/get-trips?arrivalLocation=${encodedArrivalLocation}&departureLocation=${encodedDepartureLocation}&date=${date}`;
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok: " + response.statusText);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const filteredTrips = data.filter((trip) => {
+        const tripDate = new Date(trip.departureTime)
+          .toISOString()
+          .split("T")[0];
+        return tripDate === date;
+      });
+      if (filteredTrips.length > 0) {
+        filteredTrips.forEach((trip) => {
+          const tripDate = new Date(trip.departureTime).toLocaleDateString(
+            "vi-VN",
+            {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+            }
+          );
+          let formattedArr = arrivalLocation.replace(/([A-Z])/g, " $1");
+          let formattedDepart = departureLocation.replace(/([A-Z])/g, " $1");
+          const tripItem = document.createElement("a");
+          tripItem.href = "#";
+          tripItem.classList.add("list-group-item", "list-group-item-action");
+          tripItem.textContent = `${tripDate} - ${formattedArr} đến ${formattedDepart}`;
+          tripItem.addEventListener("click", function () {
+            displaySeatMap(trip);
+          });
+          tripList.appendChild(tripItem);
+        });
+      } else {
+        const noTripsMessage = document.createElement("div");
+        noTripsMessage.classList.add("alert", "alert-warning");
+        noTripsMessage.textContent = tripList.appendChild(noTripsMessage);
+      }
+
+      searchResults.style.display = "block";
+    })
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
+      return [];
+    });
+};
+
+const displaySeatMap = (trip) => {
+  getTicketsByTripId(trip.id);
+};
