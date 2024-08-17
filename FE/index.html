@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
-    <!-- Header -->
+    <!-- header -->
     <header class="bg-dark text-white py-3 shadow-sm">
       <div class="container d-flex justify-content-between align-items-center">
         <h1 class="h3 mb-0">TruongZ</h1>
@@ -32,22 +32,29 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-center">
               <li class="nav-item">
-                <a class="nav-link" href="#search-trip">Đặt Vé</a>
-                <!-- Liên kết đến section "Tìm Chuyến Xe" -->
+                <a class="nav-link" href="#search-trip" onclick="shownBookTicket()">Đặt Vé</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#special-services">Dịch Vụ</a>
-                <!-- Liên kết đến section "Dịch Vụ Đặc Biệt" -->
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#about-us">Về Chúng Tôi</a>
-                <!-- Liên kết đến section "Về Chúng Tôi" -->
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#customer-reviews">Đánh Giá</a>
-                <!-- Liên kết đến section "Đánh Giá Khách Hàng" -->
+              </li>
+              <li class="nav-item">
+                <a
+                  class="nav-link btn btn-secondary text-white"
+                  href="#"
+                  id="ticketButton"
+                  style="display: none;" 
+                  onclick="showMyTickets()"
+                >
+                  Vé của tôi
+                </a>
               </li>
               <li class="nav-item">
                 <a
@@ -55,13 +62,9 @@
                   href="#"
                   data-bs-toggle="modal"
                   data-bs-target="#loginRegisterModal"
-                  >Đăng Nhập</a
                 >
-                <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                  <li><a class="dropdown-item" href="/logout">Đăng Xuất</a></li>
-                </ul>
-
-                <!-- Nút Đăng Nhập mở modal -->
+                  Đăng Nhập
+                </a>
               </li>
             </ul>
           </div>
@@ -102,7 +105,11 @@
                         <i class="fas fa-map-marker-alt me-2 text-primary"></i
                         >Điểm Đến
                       </label>
-                      <select class="form-select rounded-pill" id="departureLocation" required>
+                      <select
+                        class="form-select rounded-pill"
+                        id="departureLocation"
+                        required
+                      >
                         <option value="" disabled selected>
                           Chọn điểm đến
                         </option>
@@ -165,7 +172,11 @@
                       <!-- Thông tin ghế sẽ được thêm vào đây -->
                     </ul>
                     <div class="text-center" id="id-ticket">
-                      <button type="button" onclick="buyTicket()" class="btn btn-success rounded-pill px-4 py-2">
+                      <button
+                        type="button"
+                        onclick="buyTicket()"
+                        class="btn btn-success rounded-pill px-4 py-2"
+                      >
                         Thanh Toán
                       </button>
                     </div>
@@ -173,6 +184,24 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="my-tickets" class="my-tickets-section py-5" style="display: none;">
+        <div class="container">
+          <h2 class="text-center mb-5">Vé của tôi</h2>
+          <div class="list-group" id="ticketList">
+          </div>
+        </div>
+      </section>
+      <section id="ticket-details" class="ticket-details-section py-5" style="display: none;">
+        <div class="container">
+          <h2 class="text-center mb-5">Chi tiết vé</h2>
+          <div id="ticketDetailsContent">
+          </div>
+          <div class="text-center mt-4">
+            <button class="btn btn-primary" onclick="goBackToMyTickets()">Quay lại danh sách vé</button>
           </div>
         </div>
       </section>
@@ -649,9 +678,9 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
     <script src="./index.js"></script>
     <script src="./login.js"></script>
-    <script src="./trip.js"></script>
     <script src="./tickets.js"></script>
     <script src="./booking.js"></script>
   </body>

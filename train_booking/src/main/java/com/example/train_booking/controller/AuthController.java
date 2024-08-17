@@ -46,9 +46,12 @@ public class AuthController {
             Map<String, Object> response = new HashMap<>();
             request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             Authentication principalUser = SecurityContextHolder.getContext().getAuthentication();
+            User userFind = userService.findUserByName(user.getUsername());
             if (principalUser != null && principalUser.isAuthenticated() && !(principalUser instanceof AnonymousAuthenticationToken)) {
                 response.put("loggedIn", true);
                 response.put("username", principalUser.getName());
+                response.put("userId", userFind.getId());
+                response.put("userRole", userFind.getRole());
             } else {
                 response.put("loggedIn", false);
             }

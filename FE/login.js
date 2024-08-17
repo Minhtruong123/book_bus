@@ -41,12 +41,7 @@ const loginButton = () => {
   })
     .then((response) => {
       if (response.status === 200) {
-        const cookies = document.cookie.split("; ");
-        const jsessionid = cookies.find((row) => row.startsWith("JSESSIONID="));
-        if (jsessionid) {
-          localStorage.setItem("JSESSIONID", jsessionid.split("=")[1]);
-          localStorage.setItem("loggedIn", "true");
-        }
+        localStorage.setItem("username", username);
         alert("Đăng nhập thành công!");
         bootstrap.Modal.getInstance(
           document.getElementById("loginRegisterModal")
@@ -60,13 +55,16 @@ const loginButton = () => {
     })
     .then((data) => {
       if (data.loggedIn) {
-        updateLoginButton(data.username);
+        localStorage.setItem("userId", data.userId);
+        if (data.userRole === "ADMIN") {
+          window.location.href = "/admin/admin.html"; 
+        }
+        updateLoginButton();        
       } else {
         console.log("User is not logged in");
       }
     })
     .catch((error) => {
-      alert("Sai mật khẩu");
     });
 };
 
@@ -111,10 +109,17 @@ registerForm.addEventListener("submit", function (e) {
     });
 });
 
-const updateLoginButton = (username) => {
+const updateLoginButton = () => {
+  let username = localStorage.getItem("username");
   const loginBtn = document.querySelector(".login-btn");
-  console.log(loginBtn);
+  const ticketButton = document.getElementById("ticketButton");
   loginBtn.textContent = username;
+
+  if (ticketButton) {
+    ticketButton.style.display = "block";
+    ticketButton.href = "/my-tickets"; 
+  }
+
   loginBtn.classList.remove("btn-primary");
   loginBtn.classList.add("dropdown-toggle");
   loginBtn.setAttribute("id", "userDropdown");
@@ -123,9 +128,10 @@ const updateLoginButton = (username) => {
   loginBtn.setAttribute("aria-expanded", "false");
 
   const dropdownMenu = document.createElement("ul");
-  dropdownMenu.classList.add("dropdown-menu");
+  dropdownMenu.classList.add("dropdown-menu", "dropdown-menu-end");
   dropdownMenu.setAttribute("aria-labelledby", "userDropdown");
 
+  // Profile item
   const profileItem = document.createElement("li");
   const profileLink = document.createElement("a");
   profileLink.classList.add("dropdown-item");
@@ -134,13 +140,17 @@ const updateLoginButton = (username) => {
   profileItem.appendChild(profileLink);
   dropdownMenu.appendChild(profileItem);
 
+  // Logout item
   const logoutItem = document.createElement("li");
   const logoutLink = document.createElement("a");
   logoutLink.classList.add("dropdown-item");
   logoutLink.textContent = "Đăng Xuất";
-  logoutLink.href = "/logout";
+  logoutLink.href = "#";
+  logoutLink.onclick = handleLogout;
   logoutItem.appendChild(logoutLink);
   dropdownMenu.appendChild(logoutItem);
 
+  // Append the dropdown menu to the button's parent
   loginBtn.parentNode.appendChild(dropdownMenu);
 }
+

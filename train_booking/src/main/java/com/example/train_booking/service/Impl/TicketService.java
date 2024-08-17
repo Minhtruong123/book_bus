@@ -35,8 +35,38 @@ public class TicketService implements com.example.train_booking.service.TicketSe
     }
 
     @Override
+    public List<TicketDTO> getAllTicketByUserId(Integer userId) {
+        List<Ticket> tickets = ticketRepository.findAllByUserId(userId);
+        return tickets.stream().map(ticket -> new TicketDTO(
+                ticket.getId(),
+                ticket.getSeatNumber(),
+                ticket.getPrice(),
+                ticket.getBooked(),
+                ticket.getTrip().getDepartureLocation(),
+                ticket.getTrip().getArrivalLocation(),
+                ticket.getTrip().getDepartureTime(),
+                ticket.getTrip().getArrivalTime()
+        )).collect(Collectors.toList());
+    }
+
+    @Override
     public Ticket findById(Integer id) {
         return ticketRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public TicketDTO findTicketDTOById(Integer id) {
+        Ticket ticket = ticketRepository.findById(id).orElse(null);
+        return new TicketDTO(
+                ticket.getId(),
+                ticket.getSeatNumber(),
+                ticket.getPrice(),
+                ticket.getBooked(),
+                ticket.getTrip().getDepartureLocation(),
+                ticket.getTrip().getArrivalLocation(),
+                ticket.getTrip().getDepartureTime(),
+                ticket.getTrip().getArrivalTime()
+        );
     }
 
     @Override

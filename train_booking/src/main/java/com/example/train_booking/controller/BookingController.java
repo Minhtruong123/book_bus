@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,34 +32,33 @@ public class BookingController {
     @Autowired
     private TicketService ticketService;
     @PostMapping("/buy")
-    public ResponseEntity<?> buyTicket(@RequestBody BookingRequest bookingRequest, Principal principal) {
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
-        }
-        String username = principal.getName();
-        User user = userService.findUserByName(username);
-        Ticket ticket = ticketService.findById(bookingRequest.getId());
+    public ResponseEntity<?> buyTicket(@RequestBody BookingRequest bookingRequest) {
+        User user = userService.findUserByName(bookingRequest.getUsername());
 
-        if (user == null || ticket == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user or ticket");
-        }
-
-        if (ticket.getBooked()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ticket already booked");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid user");
         }
 
         Booking booking = Booking.builder()
                 .user(user)
                 .bookingDate(LocalDateTime.now())
                 .build();
-
-        ticket.setBooking(booking);
-        ticket.setBooked(true);
-        booking.setTickets(List.of(ticket));
-
         bookingService.saveBooking(booking);
-        ticketService.saveTicket(ticket);
 
-        return ResponseEntity.ok("Ticket purchased successfully");
+        for (Integer ticketId: bookingRequest.getListId()) {
+            Ticket ticket = ticketService.findById(ticketId);
+            if (ticket == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid ticket ID: " + ticketId);
+            }
+            if (ticket.getBooked()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Ticket already booked");
+            }
+            ticket.setBooking(booking);
+            ticket.setBooked(true);
+            booking.setTickets(List.of(ticket));
+            ticketService.saveTicket(ticket);
+        }
+
+        return ResponseEntity.noContent().build();
     }
 }

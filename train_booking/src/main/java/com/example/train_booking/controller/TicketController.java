@@ -24,4 +24,20 @@ public class TicketController {
             return ResponseEntity.ok(ticketDTOSs);
         }
     }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getTicketsByUserId(@PathVariable Integer id){
+        List<TicketDTO> tickets = ticketService.getAllTicketByUserId(id);
+        if (tickets.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(tickets);
+    }
+    @GetMapping("/user-ticket-detail/{id}")
+    public ResponseEntity<?> getTicketsDetail(@PathVariable Integer id){
+        TicketDTO ticketDTO = ticketService.findTicketDTOById(id);
+        if (ticketDTO == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(ticketDTO);
+    }
 }

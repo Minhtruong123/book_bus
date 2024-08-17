@@ -36,11 +36,11 @@ public class SercurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").permitAll()
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/ticket/**").permitAll()
                         .requestMatchers("/trip/**").permitAll()
-                        .requestMatchers("/booking/**").permitAll()
+                        .requestMatchers("/booking/buy").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng điều khiển quản trị viên</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="/admin/admin.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header
+      class="header d-flex justify-content-between align-items-center p-3 bg-dark text-white"
+    >
+      <div class="container">
+        <h1 class="header-title m-0">Bảng điều khiển quản trị viên</h1>
+      </div>
+      <div class="user-info d-flex align-items-center mr-4">
+        <span id="usernameDisplay" class="mr-3 font-weight-bold"></span>
+        <div class="dropdown">
+          <button
+            class="btn btn-outline-light dropdown-toggle"
+            id="userDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Người dùng
+          </button>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="userDropdown"
+          >
+            <li>
+              <a class="dropdown-item" href="/profile">Thông tin cá nhân</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" id="logoutButton">Đăng xuất</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <nav class="sidebar d-md-block bg-dark">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            href="#"
+            onclick="showContent('dashboard', this)"
+            >Bảng điều khiển</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="#"
+            onclick="showContent('manage-users', this),fetchUsers()"
+            >Quản lý người dùng</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="#"
+            onclick="showContent('manage-tickets', this)"
+            >Quản lý vé</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="#"
+            onclick="showContent('manage-buses', this)"
+            >Quản lý xe buýt</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="#"
+            onclick="showContent('manage-trips', this)"
+            >Quản lý chuyến đi</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showContent('reports', this)"
+            >Báo cáo</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showContent('settings', this)"
+            >Cài đặt</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="main-content">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Phần Bảng điều khiển -->
+          <div class="col-12" id="dashboard">
+            <!-- Thẻ Tóm tắt -->
+            <div class="row">
+              <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                      </div>
+                      <div class="ml-3">
+                        <h5 class="card-title">Tổng số người dùng</h5>
+                        <h3 class="card-text">1,245</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                      </div>
+                      <div class="ml-3">
+                        <h5 class="card-title">Vé đã bán</h5>
+                        <h3 class="card-text">3,892</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon">
+                        <i class="fas fa-bus"></i>
+                      </div>
+                      <div class="ml-3">
+                        <h5 class="card-title">Xe buýt đang hoạt động</h5>
+                        <h3 class="card-text">78</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center">
+                      <div class="card-icon">
+                        <i class="fas fa-route"></i>
+                      </div>
+                      <div class="ml-3">
+                        <h5 class="card-title">Lộ trình</h5>
+                        <h3 class="card-text">12</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Biểu đồ -->
+            <div class="row">
+              <div class="col-lg-8 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Doanh thu hàng tháng</h5>
+                    <canvas id="revenueChart"></canvas>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Phân bổ người dùng</h5>
+                    <canvas id="userChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bảng hoạt động gần đây -->
+            <div class="row">
+              <div class="col-12 mb-4">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Hoạt động gần đây</h5>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col">Người dùng</th>
+                            <th scope="col">Hoạt động</th>
+                            <th scope="col">Ngày</th>
+                            <th scope="col">Trạng thái</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>John Doe</td>
+                            <td>Đặt vé #12345</td>
+                            <td>2024-08-01</td>
+                            <td>
+                              <span class="badge badge-success"
+                                >Hoàn thành</span
+                              >
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Jane Smith</td>
+                            <td>Hủy vé #12346</td>
+                            <td>2024-08-02</td>
+                            <td>
+                              <span class="badge badge-danger">Đã hủy</span>
+                            </td>
+                          </tr>
+                          <!-- Thêm các hàng khác nếu cần -->
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phần quản lí người dùng -->
+          <div class="col-12 d-none" id="manage-users">
+            <h2>Quản lý người dùng</h2>
+
+            <!-- Phần chứa bộ lọc và nút thêm người dùng mới -->
+            <div id="userFilters" class="mb-4">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <input
+                    type="text"
+                    id="searchUser"
+                    class="form-control"
+                    placeholder="Tìm kiếm người dùng..."
+                    oninput="fetchUsers()"
+                  />
+                </div>
+                <!-- Nút thêm người dùng mới -->
+              </div>
+            </div>
+
+            <!-- Bảng hiển thị danh sách người dùng -->
+            <div id="userList">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Tên người dùng</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Vai trò</th>
+                      <th scope="col">Hành động</th>
+                    </tr>
+                  </thead>
+                  <tbody id="userTableBody">
+                    <!-- Các dòng dữ liệu người dùng sẽ được điền vào đây -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phần chỉnh sửa người dùng -->
+          <div class="col-12 d-none" id="edit-user-form">
+            <h2>Chỉnh sửa người dùng</h2>
+            <div class="card mb-4">
+              <div class="card-header">Thông tin người dùng</div>
+              <div class="card-body">
+                <form id="editUserForm">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="editUsername" class="form-label"
+                        >Tên người dùng</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="editUsername"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="editEmail" class="form-label">Email</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="editEmail"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="editPhoneNumber" class="form-label"
+                        >Số điện thoại</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="editPhoneNumber"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="editRole" class="form-label">Vai trò</label>
+                      <select class="form-select" id="editRole" required>
+                        <option value="USER">Người dùng</option>
+                        <option value="ADMIN">Quản trị viên</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-end">
+                    <button type="button" onclick="updateUser()" class="btn btn-primary mr-2">
+                      Lưu thay đổi
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      id="cancelEditUser"
+                    >
+                      Hủy
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 d-none" id="manage-tickets">
+            <h2>Quản lý vé</h2>
+            <!-- Thêm giao diện quản lý vé tại đây -->
+          </div>
+
+          <div class="col-12 d-none" id="manage-buses">
+            <h2>Quản lý xe buýt</h2>
+            <!-- Thêm giao diện quản lý xe buýt tại đây -->
+          </div>
+
+          <div class="col-12 d-none" id="manage-trips">
+            <h2>Quản lý chuyến đi</h2>
+            <!-- Thêm giao diện quản lý chuyến đi tại đây -->
+          </div>
+
+          <div class="col-12 d-none" id="reports">
+            <h2>Báo cáo</h2>
+            <!-- Thêm giao diện báo cáo tại đây -->
+          </div>
+
+          <div class="col-12 d-none" id="settings">
+            <h2>Cài đặt</h2>
+            <!-- Thêm giao diện cài đặt tại đây -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="/admin/admin.js"></script>
+    <script src="./manageUser.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const username = localStorage.getItem("username");
+        if (username) {
+          document.getElementById("userDropdown").textContent = username;
+        } else {
+          // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
+          window.location.href = "/login";
+        }
+
+        document
+          .getElementById("logoutButton")
+          .addEventListener("click", handleLogout);
+      });
+
+      const handleLogout = () => {
+        // Xóa thông tin người dùng khỏi local storage và chuyển hướng đến trang đăng nhập
+        localStorage.removeItem("username");
+        window.location.href = "/login";
+      };
+    </script>
+    <script>
+      // Biểu đồ doanh thu
+      var ctx = document.getElementById("revenueChart").getContext("2d");
+      var revenueChart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [
+            "Tháng 1",
+            "Tháng 2",
+            "Tháng 3",
+            "Tháng 4",
+            "Tháng 5",
+            "Tháng 6",
+            "Tháng 7",
+            "Tháng 8",
+            "Tháng 9",
+            "Tháng 10",
+            "Tháng 11",
+            "Tháng 12",
+          ],
+          datasets: [
+            {
+              label: "Doanh thu",
+              data: [
+                1200, 1900, 3000, 5000, 2300, 3500, 4000, 4500, 3200, 4800,
+                5200, 6000,
+              ],
+              backgroundColor: "rgba(230, 126, 34, 0.2)",
+              borderColor: "#e67e22",
+              borderWidth: 2,
+              fill: true,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+
+      // Biểu đồ phân bổ người dùng
+      var ctx2 = document.getElementById("userChart").getContext("2d");
+      var userChart = new Chart(ctx2, {
+        type: "doughnut",
+        data: {
+          labels: ["Quản trị viên", "Người dùng", "Khách"],
+          datasets: [
+            {
+              label: "Phân bổ người dùng",
+              data: [300, 1200, 200],
+              backgroundColor: ["#e67e22", "#3498db", "#2ecc71"],
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -1,6 +1,5 @@
 const getTicketsByTripId = (tripId) => {
   const url = `http://localhost:8080/ticket/get-ticket/${tripId}`;
-
   fetch(url)
     .then((response) => {
       if (!response.ok) {
@@ -12,7 +11,7 @@ const getTicketsByTripId = (tripId) => {
       seatMapRow.style.display = "flex";
 
       const seatContainer = document.querySelector(".seat-container");
-      seatContainer.innerHTML = ""; 
+      seatContainer.innerHTML = "";
       invoiceList.innerHTML = "";
       selectedSeats = [];
 
@@ -57,6 +56,8 @@ const getTicketsByTripId = (tripId) => {
     });
 };
 
+let selectedTicketIds = [];
+
 const toggleSeatSelection = (seatDiv, seat, ticket) => {
   if (selectedSeats.includes(seat)) {
     selectedSeats = selectedSeats.filter((s) => s !== seat);
@@ -66,7 +67,8 @@ const toggleSeatSelection = (seatDiv, seat, ticket) => {
     selectedSeats.push(seat);
     seatDiv.classList.add("selected");
     addSeatToInvoice(seat, ticket.price);
-    document.getElementById("id-ticket").value = ticket.id;
+    selectedTicketIds = selectedTicketIds.concat(ticket.id);
+    document.getElementById("id-ticket").value = selectedTicketIds;
   }
 };
 
@@ -88,3 +90,85 @@ const removeSeatFromInvoice = (seat) => {
     }
   });
 };
+
+function fetchTickets() {
+  let userId = localStorage.getItem("userId");
+
+  const url = `http://localhost:8080/ticket/user/${userId}`;
+  fetch(url)
+    .then((response) => response.json())
+    .then((tickets) => {
+      const ticketList = document.getElementById("ticketList");
+      ticketList.innerHTML = "";
+
+      if (tickets.length === 0) {
+        ticketList.innerHTML = '<p class="text-center">Bạn chưa có vé nào.</p>';
+        return;
+      }
+
+      tickets.forEach((ticket) => {
+        const ticketItem = document.createElement("div");
+        ticketItem.classList.add("list-group-item", "list-group-item-action");
+        let formattedArr = ticket.arrivalLocation.replace(/([A-Z])/g, " $1");
+        let formattedDepart = ticket.departureLocation.replace(/([A-Z])/g, " $1");
+        ticketItem.innerHTML = `
+          <h5 class="mb-1">Ghế: ${ticket.seatNumber}</h5>
+          <p class="mb-1">Giá: ${ticket.price} VND</p>
+          <p class="mb-1">Chuyến đi: ${formattedArr} đến ${formattedDepart} </p>
+          <small>Trạng thái: ${ticket.booked ? "Đã đặt" : "Chưa đặt"}</small>
+        `;
+        ticketItem.onclick = () => showTicketDetails(ticket.id);
+        ticketList.appendChild(ticketItem);
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching tickets:", error);
+    });
+}
+
+function showMyTickets() {
+  document.getElementById("search-trip").style.display = "none";
+  document.getElementById("my-tickets").style.display = "block";
+
+  fetchTickets();
+}
+
+function showTicketDetails(ticketId) {
+  console.log(ticketId);
+  
+  document.getElementById('my-tickets').style.display = 'none';
+  document.getElementById('ticket-details').style.display = 'block';
+
+  fetch(`http://localhost:8080/ticket/user-ticket-detail/${ticketId}`) 
+    .then(response => response.json())
+    .then(ticket => {
+      console.log(ticket);
+      
+      const ticketDetailsContent = document.getElementById('ticketDetailsContent');
+      let formattedArr = ticket.arrivalLocation.replace(/([A-Z])/g, " $1");
+      let formattedDepart = ticket.departureLocation.replace(/([A-Z])/g, " $1");
+      ticketDetailsContent.innerHTML = `
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Ghế: ${ticket.seatNumber}</h5>
+            <p class="card-text">Giá: ${ticket.price} VND</p>
+            <p class="card-text">Chuyến đi: ${formattedArr} đến ${formattedDepart}</p>
+            <p class="card-text">Trạng thái: ${ticket.booked ? 'Đã đặt' : 'Chưa đặt'}</p>
+          </div>
+        </div>
+      `;
+    })
+    .catch(error => {
+      console.error('Error fetching ticket details:', error);
+    });
+}
+
+const goBackToMyTickets = () => {
+  document.getElementById('ticket-details').style.display = 'none';
+  document.getElementById('my-tickets').style.display = 'block';
+}
+
+const shownBookTicket = () => {
+  document.getElementById("search-trip").style.display = "block";
+  document.getElementById("my-tickets").style.display = "none";
+}

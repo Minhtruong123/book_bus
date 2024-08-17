@@ -8,6 +8,8 @@ import java.util.List;
 public interface TicketService {
     List<Ticket> getAllTicket();
     List<TicketDTO> getAllTicketByTripId(Integer id);
+    List<TicketDTO> getAllTicketByUserId(Integer userId);
     Ticket findById(Integer id);
+    TicketDTO findTicketDTOById(Integer id);
     Ticket saveTicket(Ticket ticket);
 }
