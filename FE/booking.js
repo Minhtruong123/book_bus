@@ -16,6 +16,7 @@ const buyTicket = () => {
       .then((response) => {
         if (response.status === 204) {
           alert("Mua vé thành công!");
+          findTicket();
           return;
         } else if (!response.ok) {
           if (response.status === 401) {
