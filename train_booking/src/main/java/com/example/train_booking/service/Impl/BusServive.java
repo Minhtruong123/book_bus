@@ -12,7 +12,12 @@ public class BusServive implements BusService {
     @Autowired
     private BusRepository busRepository;
     @Override
-    public List<Bus> getAllBus() {
-        return busRepository.findAll();
+    public List<Bus> getAllBus(String licensePlate) {
+        return busRepository.getAllByLicensePlateContaining(licensePlate);
+    }
+
+    @Override
+    public Bus saveBus(Bus bus) {
+        return busRepository.save(bus);
     }
 }

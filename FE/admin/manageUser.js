@@ -124,7 +124,6 @@ function updateUser() {
     body: JSON.stringify(updatedUser),
   })
     .then((response) => {
-      console.log(response);
       if (response.status === 204) {
         return null;
       } else if (!response.ok) {

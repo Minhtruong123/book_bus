@@ -68,7 +68,7 @@
           <a
             class="nav-link"
             href="#"
-            onclick="showContent('manage-tickets', this)"
+            onclick="showContent('manage-tickets', this), fetchTickets()"
             >Quản lý vé</a
           >
         </li>
@@ -76,7 +76,7 @@
           <a
             class="nav-link"
             href="#"
-            onclick="showContent('manage-buses', this), fetchBuses()"
+            onclick="showContent('manage-buses', this), fetchBuses('')"
             >Quản lý xe khách</a
           >
         </li>
@@ -346,9 +346,42 @@
             </div>
           </div>
 
-          <div class="col-12 d-none" id="manage-tickets">
-            <h2>Quản lý vé</h2>
-            <!-- Thêm giao diện quản lý vé tại đây -->
+          <!-- Phần quản lí vé -->
+          <div class="col-12" id="manage-tickets">
+            <h2 class="mb-4">Quản lý vé</h2>
+
+            <!-- Search and Add New Ticket -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <input
+                type="text"
+                id="searchTicket"
+                class="form-control w-50"
+                placeholder="Tìm kiếm vé..."
+                oninput="fetchTickets(this.value)"
+              />
+              <button class="btn btn-primary" onclick="showAddTicketForm()">
+                Thêm vé mới
+              </button>
+            </div>
+
+            <!-- Ticket List Table -->
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Ghế</th>
+                    <th>Giá</th>
+                    <th>Nơi đi</th>
+                    <th>Nơi đến</th>
+                    <th>Hành động</th>
+                  </tr>
+                </thead>
+                <tbody id="ticketTableBody">
+                  <!-- Rows will be dynamically generated here -->
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <!-- Phần quản lí xe Khách -->
@@ -364,7 +397,7 @@
                     id="searchBus"
                     class="form-control"
                     placeholder="Tìm kiếm xe buýt..."
-                    oninput="fetchBuses()"
+                    oninput="fetchBuses(this.value)"
                   />
                 </div>
                 <!-- Nút thêm xe buýt mới -->
@@ -374,7 +407,7 @@
               </div>
             </div>
 
-            <!-- Bảng hiển thị danh sách xe buýt -->
+            <!-- Bảng hiển thị danh sách xe khách -->
             <div id="busList">
               <div class="table-responsive">
                 <table class="table table-hover">
@@ -388,14 +421,14 @@
                     </tr>
                   </thead>
                   <tbody id="busTableBody">
-                    <!-- Các dòng dữ liệu xe buýt sẽ được điền vào đây -->
+                    <!-- Các dòng dữ liệu xe khách sẽ được điền vào đây -->
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
 
-          <!-- Phần thêm/chỉnh sửa xe buýt -->
+          <!-- Phần thêm/chỉnh sửa xe khách -->
           <div class="col-12 d-none" id="edit-bus-form">
             <h2 id="formTitle">Chỉnh sửa xe khách</h2>
             <div class="card mb-4">
@@ -440,8 +473,9 @@
                   <div class="d-flex justify-content-end">
                     <button
                       type="button"
-                      onclick="saveBus()"
+                      id="save-change"
                       class="btn btn-primary mr-2"
+                      onclick="saveBus()"
                     >
                       Lưu thay đổi
                     </button>
@@ -484,6 +518,7 @@
 
     <script src="/admin/admin.js"></script>
     <script src="./bus.js"></script>
+    <script src="./ticket.js"></script>
     <script src="./manageUser.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {

@@ -1,9 +1,12 @@
 package com.example.train_booking.controller;
 
+import com.example.train_booking.dto.TicketDTO;
 import com.example.train_booking.dto.UserDTO;
 import com.example.train_booking.entity.Bus;
+import com.example.train_booking.entity.Ticket;
 import com.example.train_booking.entity.User;
 import com.example.train_booking.service.Impl.BusServive;
+import com.example.train_booking.service.Impl.TicketService;
 import com.example.train_booking.service.Impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,8 @@ public class AdminController {
     private UserService userService;
     @Autowired
     private BusServive busServive;
+    @Autowired
+    private TicketService ticketService;
     @GetMapping("/get-user/{id}")
     public ResponseEntity<?> getUser(@PathVariable Integer id){
         try {
@@ -35,8 +40,18 @@ public class AdminController {
     }
     @GetMapping("/get-buses")
     public ResponseEntity<?> getAllBuses(@RequestParam(name = "licensePlate", required = false) String licensePlate){
-        List<Bus> buses = busServive.getAllBus();
+        List<Bus> buses = busServive.getAllBus(licensePlate);
         return ResponseEntity.ok(buses);
+    }
+    @GetMapping("/get-tickets")
+    public ResponseEntity<?> getAllTickets(){
+        List<TicketDTO> tickets = ticketService.getAllTicket();
+        return ResponseEntity.ok(tickets);
+    }
+    @PostMapping("/add-bus")
+    public ResponseEntity<?> addNewBus(@RequestBody Bus bus){
+        Bus bus1 = busServive.saveBus(bus);
+        return ResponseEntity.noContent().build();
     }
     @DeleteMapping("/delete-user/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Integer id){

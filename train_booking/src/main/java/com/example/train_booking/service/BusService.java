@@ -5,5 +5,6 @@ import com.example.train_booking.entity.Bus;
 import java.util.List;
 
 public interface BusService {
-    List<Bus> getAllBus();
+    List<Bus> getAllBus(String licensePlate);
+    Bus saveBus(Bus bus);
 }

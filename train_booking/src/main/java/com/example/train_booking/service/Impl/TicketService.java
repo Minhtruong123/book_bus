@@ -15,8 +15,18 @@ public class TicketService implements com.example.train_booking.service.TicketSe
     private TicketRepository ticketRepository;
 
     @Override
-    public List<Ticket> getAllTicket() {
-        return ticketRepository.findAll();
+    public List<TicketDTO> getAllTicket() {
+        List<Ticket> tickets = ticketRepository.findAll();
+        return tickets.stream().map(ticket -> new TicketDTO(
+                ticket.getId(),
+                ticket.getSeatNumber(),
+                ticket.getPrice(),
+                ticket.getBooked(),
+                ticket.getTrip().getDepartureLocation(),
+                ticket.getTrip().getArrivalLocation(),
+                ticket.getTrip().getDepartureTime(),
+                ticket.getTrip().getArrivalTime()
+        )).collect(Collectors.toList());
     }
 
     @Override
